@@ -187,5 +187,6 @@ module.exports = {
     addMaintenanceRecord,
     updateCarMileage,
     removeMaintenanceRecord,
-    replaceCarFeatures
+    replaceCarFeatures,
+    updateCarColor
 }
