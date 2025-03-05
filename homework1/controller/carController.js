@@ -11,6 +11,18 @@ async function getAllCars(req, res) {
     }
 }
 
+async function addMaintenanceRecord(req, res) {
+    try {
+        const { carId, serviceType, date, cost } = req.body;
+        const result = await Car.addMaintenanceRecord(carId, { serviceType, date, cost });
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: 'Maintenance record added successfully' }));
+    } catch (error) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Unable to add maintenance record' }));
+    }
+}
+
 async function createCar(req, res) {
     let body = '';
     req.on('data', chunk => {
@@ -72,6 +84,64 @@ async function updateCar(req, res) {
     });
 }
 
+async function updateCarMileage(req, res) {
+    try {
+      const id = req.url.split('/')[2];
+      const { mileage } = JSON.parse(await getRequestBody(req));
+      const result = await Car.updateMileage(id, mileage);
+      if (result.modifiedCount > 0) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: 'Car mileage updated successfully' }));
+      } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Car not found' }));
+      }
+    } catch (error) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Invalid input' }));
+    }
+  }
+
+  async function updateCarColor(req, res) {
+    try {
+      const id = req.url.split('/')[2];
+      const { color } = JSON.parse(await getRequestBody(req));
+      const result = await Car.updateColor(id, color);
+      if (result.modifiedCount > 0) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: 'Car color updated successfully' }));
+      } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Car not found' }));
+      }
+    } catch (error) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Invalid input' }));
+    }
+  }
+  
+  
+
+async function replaceCarFeatures(req, res) {
+    try {
+      const id = req.url.split('/')[2];
+      const newFeatures = JSON.parse(await getRequestBody(req)).features;
+      const result = await Car.replaceFeatures(id, newFeatures);
+      if (result.modifiedCount > 0) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: 'Car features replaced successfully' }));
+      } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Car not found' }));
+      }
+    } catch (error) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Invalid input' }));
+    }
+  }
+  
+
+
 async function deleteCar(req, res) {
     const id = req.url.split('/')[2];
     try {
@@ -89,10 +159,33 @@ async function deleteCar(req, res) {
     }
 }
 
+async function removeMaintenanceRecord(req, res) {
+    try {
+      const carId = req.url.split('/')[2];
+      const recordId = req.url.split('/')[4];
+      const result = await Car.removeMaintenanceRecord(carId, recordId);
+      if (result.modifiedCount > 0) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: 'Maintenance record removed successfully' }));
+      } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Car or maintenance record not found' }));
+      }
+    } catch (error) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Internal server error' }));
+    }
+  }
+  
+
 module.exports = {
     getAllCars,
     getCarById,
     updateCar,
     deleteCar,
-    createCar
+    createCar,
+    addMaintenanceRecord,
+    updateCarMileage,
+    removeMaintenanceRecord,
+    replaceCarFeatures
 }

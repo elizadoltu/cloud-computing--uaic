@@ -38,6 +38,28 @@ class Car {
         const db = getDb();
         return db.collection('cars').deleteOne({ _id: ObjectId.createFromHexString(id) });
     }
+
+    static async addMaintenanceRecord(id, record) {
+        const db = getDb();
+        return db.collection('cars').updateOne(
+          { _id: ObjectId.createFromHexString(id) },
+          { 
+            $push: { maintenanceRecords: record },
+            $set: { lastUpdated: new Date() }
+          }
+        );
+      }
+    
+      static async removeMaintenanceRecord(carId, recordId) {
+        const db = getDb();
+        return db.collection('cars').updateOne(
+          { _id: ObjectId.createFromHexString(carId) },
+          { 
+            $pull: { maintenanceRecords: { _id: ObjectId.createFromHexString(recordId) } },
+            $set: { lastUpdated: new Date() }
+          }
+        );
+      }
 }
 
 module.exports = Car;
