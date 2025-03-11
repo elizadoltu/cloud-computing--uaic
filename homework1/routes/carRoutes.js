@@ -37,6 +37,8 @@ function handleCarRoutes(req, res) {
     const recordId = pathSegments[3];
     if (req.method === 'DELETE') {
       carController.removeMaintenanceRecord(req, res);
+    } else if (req.method === 'GET') {
+      carController.getMaintenanceRecordById(req, res);
     }
   } else {
     res.writeHead(404, { 'Content-Type': 'application/json' });

@@ -19,7 +19,7 @@ async function addMaintenanceRecord(req, res) {
     req.on('end', async () => {
         try {
             const { serviceType, date, cost } = JSON.parse(body);
-            const carId = req.url.split('/')[2]; 
+            const carId = req.url.split('/')[2];  
 
             if (!serviceType || !date || !cost) {
                 throw new Error('Missing required fields');
@@ -78,6 +78,34 @@ async function getCarById(req, res) {
         res.end(JSON.stringify({ error: 'Internal server error' }));
     }
 }
+
+async function getMaintenanceRecordById(req, res) {
+  try {
+    const carId = req.url.split('/')[2];
+    const recordId = req.url.split('/')[4];
+
+    const car = await Car.findById(carId);
+    if (!car) {
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Car not found' }));
+      return;
+    }
+    
+    const maintenanceRecord = car.maintenanceRecords.find(record => record.id === recordId);
+    
+    if (maintenanceRecord) {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(maintenanceRecord));
+    } else {
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Maintenance record not found' }));
+    }
+  } catch (error) {
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Internal server error' }));
+  }
+  }
+
 
 async function updateCar(req, res) {
     const id = req.url.split('/')[2];
@@ -204,6 +232,7 @@ module.exports = {
     deleteCar,
     createCar,
     addMaintenanceRecord,
+    getMaintenanceRecordById,
     updateCarMileage,
     removeMaintenanceRecord,
     replaceCarFeatures,
