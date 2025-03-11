@@ -60,6 +60,28 @@ class Car {
           }
         );
       }
+
+      static async updateMaintenanceRecord(carId, recordId, updateData) {
+        const db = getDb();
+        
+        const updateFields = {};
+        
+        Object.keys(updateData).forEach(key => {
+          updateFields[`maintenanceRecords.$.${key}`] = updateData[key];
+        });
+        
+        return db.collection('cars').updateOne(
+          { 
+            _id: ObjectId.createFromHexString(carId),
+            "maintenanceRecords._id": ObjectId.createFromHexString(recordId)
+          },
+          { 
+            $set: updateFields,
+            $set: { lastUpdated: new Date() }
+          }
+        );
+      }
+      
 }
 
 module.exports = Car;

@@ -39,6 +39,8 @@ function handleCarRoutes(req, res) {
       carController.removeMaintenanceRecord(req, res);
     } else if (req.method === 'GET') {
       carController.getMaintenanceRecordById(req, res);
+    } else if (req.method === 'PATCH') {
+      carController.updateMaintenanceRecord(req, res);
     }
   } else {
     res.writeHead(404, { 'Content-Type': 'application/json' });

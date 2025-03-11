@@ -145,23 +145,38 @@ async function updateCar(req, res) {
     });
 }
 
-async function updateCarMileage(req, res) {
+async function updateMaintenanceRecord(req, res) {
+  let body = '';
+  req.on('data', chunk => {
+    body += chunk.toString();
+  });
+  req.on('end', async () => {
     try {
-      const id = req.url.split('/')[2];
-      const { mileage } = JSON.parse(await getRequestBody(req));
-      const result = await Car.updateMileage(id, mileage);
+      const carId = req.url.split('/')[2];
+      const recordId = req.url.split('/')[4];
+      const updateData = JSON.parse(body);
+      
+      if (Object.keys(updateData).length === 0) {
+        throw new Error('No fields to update');
+      }
+      
+      const result = await Car.updateMaintenanceRecord(carId, recordId, updateData);
+      
       if (result.modifiedCount > 0) {
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Car mileage updated successfully' }));
+        res.end(JSON.stringify({ message: 'Maintenance record updated successfully' }));
       } else {
         res.writeHead(404, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Car not found' }));
+        res.end(JSON.stringify({ error: 'Car or maintenance record not found' }));
       }
     } catch (error) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: 'Invalid input' }));
+      res.end(JSON.stringify({ error: error.message || 'Unable to update maintenance record' }));
     }
-  }
+  });
+}
+
+
 
   async function updateCarColor(req, res) {
     try {
@@ -247,7 +262,7 @@ module.exports = {
     createCar,
     addMaintenanceRecord,
     getMaintenanceRecordById,
-    updateCarMileage,
+    updateMaintenanceRecord,
     removeMaintenanceRecord,
     replaceCarFeatures,
     updateCarColor
