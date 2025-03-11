@@ -145,6 +145,60 @@
 					],
 					"cookie": [],
 					"body": "[\n    {\n        \"_id\": \"67c8592a576efa0501a9c992\",\n        \"make\": \"Toyota\",\n        \"model\": \"Corolla\",\n        \"year\": 2025,\n        \"color\": \"Red\"\n    },\n    {\n        \"_id\": \"67c85a58576efa0501a9c993\",\n        \"make\": \"Ford\",\n        \"model\": \"Focus\",\n        \"year\": 2023,\n        \"color\": \"Silver\"\n    },\n    {\n        \"_id\": \"67c85a61576efa0501a9c994\",\n        \"make\": \"Chevrolet\",\n        \"model\": \"Malibu\",\n        \"year\": 2025,\n        \"color\": \"Black\"\n    },\n    {\n        \"_id\": \"67c85a6b576efa0501a9c995\",\n        \"make\": \"Nissan\",\n        \"model\": \"Altima\",\n        \"year\": 2024,\n        \"color\": \"White\"\n    },\n    {\n        \"_id\": \"67c85a76576efa0501a9c996\",\n        \"make\": \"BMW\",\n        \"model\": \"3 Series\",\n        \"year\": 2025,\n        \"color\": \"Gray\"\n    }\n]"
+				},
+				{
+					"name": "Get Maintenance By Id",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://cloud-computing-uaic-production.up.railway.app/cars/67c85a61576efa0501a9c994/maintenance/67d00f82827f2642d59dd429",
+							"protocol": "https",
+							"host": [
+								"cloud-computing-uaic-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"cars",
+								"67c85a61576efa0501a9c994",
+								"maintenance",
+								"67d00f82827f2642d59dd429"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 11 Mar 2025 10:31:50 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "railway-edge"
+						},
+						{
+							"key": "X-Railway-Edge",
+							"value": "railway/europe-west4"
+						},
+						{
+							"key": "X-Railway-Request-Id",
+							"value": "_f_s0-PrSXqbDr_KmHjv1w_3243920489"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"_id\": \"67d00f82827f2642d59dd429\",\n    \"serviceType\": \"Oil Change\",\n    \"date\": \"2025-03-01T17:00:00Z\",\n    \"cost\": 70\n}"
 				}
 			]
 		},
@@ -170,7 +224,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"make\":\"Mercedes\",\"model\":\"C-Class\",\"year\":2023,\"color\":\"Green\"}",
+					"raw": "{\n  \"serviceType\": \"Oil Change\",\n  \"date\": \"2025-03-05T17:00:00Z\", \n  \"cost\": 70.00\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -178,7 +232,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://cloud-computing-uaic-production.up.railway.app/cars",
+					"raw": "https://cloud-computing-uaic-production.up.railway.app/cars/67c85a58576efa0501a9c993/maintenance",
 					"protocol": "https",
 					"host": [
 						"cloud-computing-uaic-production",
@@ -187,7 +241,9 @@
 						"app"
 					],
 					"path": [
-						"cars"
+						"cars",
+						"67c85a58576efa0501a9c993",
+						"maintenance"
 					]
 				},
 				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
@@ -208,7 +264,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://cloud-computing-uaic-production.up.railway.app/cars",
+							"raw": "https://cloud-computing-uaic-production.up.railway.app/cars/67c85a58576efa0501a9c993/maintenance",
 							"protocol": "https",
 							"host": [
 								"cloud-computing-uaic-production",
@@ -217,7 +273,9 @@
 								"app"
 							],
 							"path": [
-								"cars"
+								"cars",
+								"67c85a58576efa0501a9c993",
+								"maintenance"
 							]
 						}
 					},
@@ -252,6 +310,68 @@
 					],
 					"cookie": [],
 					"body": "{\n    \"id\": \"67c8592a576efa0501a9c992\",\n    \"message\": \"Car created successfully\"\n}"
+				},
+				{
+					"name": "Create Maintenance",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"serviceType\": \"Oil Change\",\n  \"date\": \"2025-03-05T17:00:00Z\", \n  \"cost\": 70.00\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://cloud-computing-uaic-production.up.railway.app/cars/67c85a58576efa0501a9c993/maintenance",
+							"protocol": "https",
+							"host": [
+								"cloud-computing-uaic-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"cars",
+								"67c85a58576efa0501a9c993",
+								"maintenance"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 05 Mar 2025 15:07:57 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "railway-edge"
+						},
+						{
+							"key": "X-Railway-Edge",
+							"value": "railway/europe-west4"
+						},
+						{
+							"key": "X-Railway-Request-Id",
+							"value": "gchN69pKTyC11eLG77338Q_2621307460"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Maintenance record added successfully\"\n}"
 				}
 			]
 		},
@@ -361,6 +481,69 @@
 					],
 					"cookie": [],
 					"body": "{\n    \"message\": \"Car updated successfully\"\n}"
+				},
+				{
+					"name": "Update Car Maintenance",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"serviceType\": \"Oil Change Motor\",\n    \"date\": \"2025-03-01T17:00:00Z\",\n    \"cost\": 75\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://cloud-computing-uaic-production.up.railway.app/cars/67c85a61576efa0501a9c994/maintenance/67d00f82827f2642d59dd429",
+							"protocol": "https",
+							"host": [
+								"cloud-computing-uaic-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"cars",
+								"67c85a61576efa0501a9c994",
+								"maintenance",
+								"67d00f82827f2642d59dd429"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 11 Mar 2025 10:39:41 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "railway-edge"
+						},
+						{
+							"key": "X-Railway-Edge",
+							"value": "railway/europe-west4"
+						},
+						{
+							"key": "X-Railway-Request-Id",
+							"value": "JH5LjNSnSda78dWdY8XmWw_499424464"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Maintenance record updated successfully\"\n}"
 				}
 			]
 		},
@@ -470,6 +653,69 @@
 					],
 					"cookie": [],
 					"body": "{\n    \"message\": \"Car deleted successfully\"\n}"
+				},
+				{
+					"name": "Remove Maintenance",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://cloud-computing-uaic-production.up.railway.app/cars/67c85a61576efa0501a9c994/maintenance/67d00f82827f2642d59dd429",
+							"protocol": "https",
+							"host": [
+								"cloud-computing-uaic-production",
+								"up",
+								"railway",
+								"app"
+							],
+							"path": [
+								"cars",
+								"67c85a61576efa0501a9c994",
+								"maintenance",
+								"67d00f82827f2642d59dd429"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 11 Mar 2025 10:40:28 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "railway-edge"
+						},
+						{
+							"key": "X-Railway-Edge",
+							"value": "railway/europe-west4"
+						},
+						{
+							"key": "X-Railway-Request-Id",
+							"value": "GRMANSSSSXas4EWTQPiiOw_499424464"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Maintenance record removed successfully\"\n}"
 				}
 			]
 		}
