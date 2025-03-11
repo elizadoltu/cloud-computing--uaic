@@ -104,7 +104,7 @@ async function getMaintenanceRecordById(req, res) {
       return;
     }
     
-    const maintenanceRecord = car.maintenanceRecords.find(record => record.id === recordId);
+    const maintenanceRecord = car.maintenanceRecords.find(record => record._id.toString() === recordId);
     
     if (maintenanceRecord) {
       res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -117,7 +117,8 @@ async function getMaintenanceRecordById(req, res) {
     res.writeHead(500, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ error: 'Internal server error' }));
   }
-  }
+}
+
 
 
 async function updateCar(req, res) {
