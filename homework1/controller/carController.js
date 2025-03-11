@@ -12,35 +12,43 @@ async function getAllCars(req, res) {
 }
 
 async function addMaintenanceRecord(req, res) {
-    let body = '';
-    req.on('data', chunk => {
-        body += chunk.toString();
-    });
-    req.on('end', async () => {
-        try {
-            const { serviceType, date, cost } = JSON.parse(body);
-            const carId = req.url.split('/')[2];  
+  let body = '';
+  req.on('data', chunk => {
+      body += chunk.toString();
+  });
+  req.on('end', async () => {
+      try {
+          const { serviceType, date, cost } = JSON.parse(body);
+          const carId = req.url.split('/')[2];  
 
-            if (!serviceType || !date || !cost) {
-                throw new Error('Missing required fields');
-            }
+          if (!serviceType || !date || !cost) {
+              throw new Error('Missing required fields');
+          }
 
-            const result = await Car.addMaintenanceRecord(carId, { serviceType, date, cost });
-            
-            if (result.modifiedCount > 0) {
-                res.writeHead(201, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ message: 'Maintenance record added successfully' }));
-            } else {
-                res.writeHead(404, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ error: 'Car not found' }));
-            }
-        } catch (error) {
-            res.writeHead(400, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: error.message || 'Unable to add maintenance record' }));
-        }
-    });
+          const maintenanceRecord = {
+              serviceType,
+              date,
+              cost
+          };
+
+          const result = await Car.addMaintenanceRecord(carId, maintenanceRecord);
+          
+          if (result.modifiedCount > 0) {
+              res.writeHead(201, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ 
+                  message: 'Maintenance record added successfully',
+                  // The ID would be returned from your model layer if needed
+              }));
+          } else {
+              res.writeHead(404, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ error: 'Car not found' }));
+          }
+      } catch (error) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: error.message || 'Unable to add maintenance record' }));
+      }
+  });
 }
-
 
 async function createCar(req, res) {
     let body = '';
