@@ -1,4 +1,5 @@
 const Car = require('../models/car');
+const { ObjectId } = require('mongodb');
 
 async function getAllCars(req, res) {
     try {
@@ -25,7 +26,10 @@ async function addMaintenanceRecord(req, res) {
               throw new Error('Missing required fields');
           }
 
+          const recordId = new ObjectId();
+          
           const maintenanceRecord = {
+              _id: recordId,
               serviceType,
               date,
               cost
@@ -37,7 +41,7 @@ async function addMaintenanceRecord(req, res) {
               res.writeHead(201, { 'Content-Type': 'application/json' });
               res.end(JSON.stringify({ 
                   message: 'Maintenance record added successfully',
-                  // The ID would be returned from your model layer if needed
+                  recordId: recordId.toString()
               }));
           } else {
               res.writeHead(404, { 'Content-Type': 'application/json' });
@@ -49,6 +53,7 @@ async function addMaintenanceRecord(req, res) {
       }
   });
 }
+
 
 async function createCar(req, res) {
     let body = '';
