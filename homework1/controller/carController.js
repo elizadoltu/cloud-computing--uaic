@@ -121,7 +121,7 @@ async function getMaintenanceRecordById(req, res) {
 
 
 
-async function updateCar(req, res) {
+async function updateCarDetails(req, res) {
     const id = req.url.split('/')[2];
     let body = '';
     req.on('data', chunk => {
@@ -257,7 +257,7 @@ async function removeMaintenanceRecord(req, res) {
 module.exports = {
     getAllCars,
     getCarById,
-    updateCar,
+    updateCarDetails,
     deleteCar,
     createCar,
     addMaintenanceRecord,
