@@ -127,6 +127,20 @@ class Car {
     }
   }
 
+  static async findByClientId(clientId) {
+    try {
+      console.log(`Directly querying for cars with clientId: ${clientId}`);
+      const db = getDb();
+      const cars = await db.collection('cars').find({ clientId: clientId }).toArray();
+      console.log(`Found ${cars.length} cars for clientId: ${clientId}`);
+      return cars;
+    } catch (error) {
+      console.error('Error in Car.findByClientId:', error);
+      throw error;
+    }
+  }
+  
+
   static async update(id, updateData) {
     const db = getDb();
     return db.collection('cars').updateOne(
