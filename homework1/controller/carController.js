@@ -97,33 +97,24 @@ async function getCarById(req, res) {
 }
 
 async function getCarsByClient(req, res) {
-  let body = '';
-  req.on('data', chunk => {
-    body += chunk.toString();
-  });
-
-  req.on('end', async () => {
-    try {
-      const { clientId } = JSON.parse(body);
-      
-      if (!clientId) {
-        res.writeHead(400, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Client ID is required' }));
-        return;
-      }
-      
-      const cars = await Car.findAll(clientId);
-      
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(cars));
-    } catch (error) {
-      res.writeHead(500, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: 'Internal server error' }));
+  try {
+    const clientId = req.clientId;
+    
+    if (!clientId) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Client ID is required' }));
+      return;
     }
-  });
+    
+    const cars = await Car.findAll(clientId);
+    
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(cars));
+  } catch (error) {
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Internal server error' }));
+  }
 }
-
-
 
 async function getMaintenanceRecordById(req, res) {
   try {
