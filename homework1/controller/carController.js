@@ -106,15 +106,19 @@ async function getCarsByClient(req, res) {
       return;
     }
     
+    console.log(`Fetching cars for clientId: ${clientId}`);
     const cars = await Car.findAll(clientId);
+    console.log(`Found ${cars.length} cars for clientId: ${clientId}`);
     
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(cars));
   } catch (error) {
+    console.error('Error in getCarsByClient:', error);
     res.writeHead(500, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ error: 'Internal server error' }));
   }
 }
+
 
 async function getMaintenanceRecordById(req, res) {
   try {
