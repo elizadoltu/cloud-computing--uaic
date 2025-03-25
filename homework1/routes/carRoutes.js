@@ -7,14 +7,14 @@ function handleCarRoutes(req, res) {
   const trimmedPath = path.replace(/^\/+|\/+$/g, '');
   const pathSegments = trimmedPath.split('/');
 
-  if (trimmedPath === 'cars' && req.method === 'GET') {
-    const urlParts = url.parse(req.url, true);
-    const queryParams = urlParts.query;
-    req.clientId = queryParams.clientId;
+  if (trimmedPath.startsWith('cars/') && req.method === 'GET') {
+    const clientId = trimmedPath.split('/')[1]; 
+    req.clientId = clientId;
     carController.getCarsByClient(req, res);
-} else if (trimmedPath === 'cars' && req.method === 'POST') {
+  } else if (trimmedPath === 'cars' && req.method === 'POST') {
     carController.createCar(req, res);
-}
+  }
+  
  else if (pathSegments[0] === 'cars' && pathSegments.length === 2) {
     const carId = pathSegments[1];
     if (req.method === 'GET') {
