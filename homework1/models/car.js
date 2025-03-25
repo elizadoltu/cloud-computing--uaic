@@ -114,6 +114,19 @@ class Car {
     return result.insertedId;
   }
 
+  async findAllCars() {
+    try {
+      console.log("Fetching all cars from the database...");
+      const db = getDb();
+      const cars = await db.collection('cars').find({}).toArray();
+      console.log(`Found ${cars.length} cars in total.`);
+      return cars;
+    } catch (error) {
+      console.error('Error in Car.findAllCars:', error);
+      throw error; // Rethrow to be handled by the calling function
+    }
+  }
+
   static async update(id, updateData) {
     const db = getDb();
     return db.collection('cars').updateOne(

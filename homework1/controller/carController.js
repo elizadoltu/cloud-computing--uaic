@@ -98,26 +98,25 @@ async function getCarById(req, res) {
 
 async function getCarsByClient(req, res) {
   try {
+    console.log("Using findAllCars method to retrieve all cars...");
+    const allCars = await Car.findAllCars();
+    
     const clientId = req.clientId;
+    const filteredCars = clientId 
+      ? allCars.filter(car => car.clientId === clientId)
+      : allCars;
     
-    if (!clientId) {
-      res.writeHead(400, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: 'Client ID is required' }));
-      return;
-    }
-    
-    console.log(`Fetching cars for clientId: ${clientId}`);
-    const cars = await Car.findAll(clientId);
-    console.log(`Found ${cars.length} cars for clientId: ${clientId}`);
+    console.log(`Found ${filteredCars.length} cars for clientId: ${clientId || 'none'}`);
     
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify(cars));
+    res.end(JSON.stringify(filteredCars));
   } catch (error) {
     console.error('Error in getCarsByClient:', error);
     res.writeHead(500, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ error: 'Internal server error' }));
   }
 }
+
 
 
 async function getMaintenanceRecordById(req, res) {
