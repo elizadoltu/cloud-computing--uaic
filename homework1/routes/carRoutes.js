@@ -8,7 +8,7 @@ function handleCarRoutes(req, res) {
   const pathSegments = trimmedPath.split('/');
 
   if (trimmedPath === 'cars' && req.method === 'GET') {
-    carController.getAllCars(req, res);
+    carController.getCarsByClient(req, res);
   } else if (trimmedPath === 'cars' && req.method === 'POST') {
     carController.createCar(req, res);
   } else if (pathSegments[0] === 'cars' && pathSegments.length === 2) {
