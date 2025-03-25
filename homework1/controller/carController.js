@@ -56,24 +56,28 @@ async function addMaintenanceRecord(req, res) {
 
 
 async function createCar(req, res) {
-    let body = '';
-    req.on('data', chunk => {
-        body += chunk.toString();
-    });
+  let body = '';
+  req.on('data', chunk => {
+    body += chunk.toString();
+  });
 
-    req.on('end', async () => {
-        try {
-            const { make, model, year, color } = JSON.parse(body);
-            const car = new Car(make, model, year, color);
-            const id = await car.save();
-            res.writeHead(201, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ id, message: 'Car created successfully' }));
-        } catch (error) {
-            res.writeHead(400, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Invalid input' }));
-        }
-    });
+  req.on('end', async () => {
+    try {
+      const { make, model, year, color, clientId } = JSON.parse(body); 
+      if (!clientId) throw new Error('Client ID is required');
+      
+      const car = new Car(make, model, year, color, clientId);
+      const id = await car.save();
+      
+      res.writeHead(201, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ id, message: 'Car created successfully' }));
+    } catch (error) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: error.message || 'Invalid input' }));
+    }
+  });
 }
+
 
 async function getCarById(req, res) {
     const id = req.url.split('/')[2];
@@ -91,6 +95,20 @@ async function getCarById(req, res) {
         res.end(JSON.stringify({ error: 'Internal server error' }));
     }
 }
+
+async function getCarsByClient(req, res) {
+  const clientId = req.url.split('/')[2]; // Extract client ID from the URL
+  try {
+    const cars = await Car.findAll(clientId);
+    
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(cars));
+  } catch (error) {
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Internal server error' }));
+  }
+}
+
 
 async function getMaintenanceRecordById(req, res) {
   try {
@@ -122,28 +140,32 @@ async function getMaintenanceRecordById(req, res) {
 
 
 async function updateCarDetails(req, res) {
-    const id = req.url.split('/')[2];
-    let body = '';
-    req.on('data', chunk => {
-        body += chunk.toString();
-    });
-    req.on('end', async() => {
-        try {
-            const updateData = JSON.parse(body);
-            const result = await Car.update(id, updateData);
-            if (result.modifiedCount > 0) {
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ message: 'Car updated successfully' }));
-            } else {
-                res.writeHead(404, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ error: 'Car not found' }));
-            }
-        } catch (error) {
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Invalid inoput' }));
-        }
-    });
+  const id = req.url.split('/')[2];
+  
+  let body = '';
+  req.on('data', chunk => {
+    body += chunk.toString();
+  });
+
+  req.on('end', async () => {
+    try {
+      const updateData = JSON.parse(body);
+      const result = await Car.update(id, updateData);
+
+      if (result.modifiedCount > 0) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: 'Car updated successfully' }));
+      } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Car not found or not authorized to update' }));
+      }
+    } catch (error) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: error.message || 'Invalid input' }));
+    }
+  });
 }
+
 
 async function updateMaintenanceRecord(req, res) {
   let body = '';
@@ -218,22 +240,25 @@ async function replaceCarFeatures(req, res) {
   
 
 
-async function deleteCar(req, res) {
+  async function deleteCar(req, res) {
     const id = req.url.split('/')[2];
+    
     try {
-        const result = await Car.delete(id);
-        if (result.deletedCount > 0) {
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Car deleted successfully' }));
-        } else {
-            res.writeHead(404, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Cat not found' }));
-        }
+      const result = await Car.delete(id);
+  
+      if (result.deletedCount > 0) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: 'Car deleted successfully' }));
+      } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Car not found or not authorized to delete' }));
+      }
     } catch (error) {
-        res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Internal Server Error' }));
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: error.message || 'Internal Server Error' }));
     }
-}
+  }
+  
 
 async function removeMaintenanceRecord(req, res) {
     try {
@@ -259,6 +284,7 @@ module.exports = {
     getCarById,
     updateCarDetails,
     deleteCar,
+    getCarsByClient,
     createCar,
     addMaintenanceRecord,
     getMaintenanceRecordById,

@@ -14,7 +14,7 @@ function handleCarRoutes(req, res) {
   } else if (pathSegments[0] === 'cars' && pathSegments.length === 2) {
     const carId = pathSegments[1];
     if (req.method === 'GET') {
-      carController.getCarById(req, res);
+      carController.getCarsByClient(req, res);
     } else if (req.method === 'PUT') {
       carController.updateCarDetails(req, res);
     } else if (req.method === 'DELETE') {
