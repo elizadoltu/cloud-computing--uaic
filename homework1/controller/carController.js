@@ -102,8 +102,10 @@ async function getCarsByClient(req, res) {
     const allCars = await Car.findAllCars();
     
     const clientId = req.clientId;
+    console.log(`Filtering cars for clientId: ${clientId}`);
+    
     const filteredCars = clientId 
-      ? allCars.filter(car => car.clientId === clientId)
+      ? allCars.filter(car => String(car.clientId) === String(clientId))
       : allCars;
     
     console.log(`Found ${filteredCars.length} cars for clientId: ${clientId || 'none'}`);
